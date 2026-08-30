@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cat Swapper"
+  short_description: "Replace a wallpaper cat from reference photos"
+  default_prompt: "Use $cat-swapper to replace the cat in my base image with the cat shown in my reference photos."
