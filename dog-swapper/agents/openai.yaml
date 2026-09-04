@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dog Swapper"
+  short_description: "Replace a wallpaper dog from reference photos"
+  default_prompt: "Use $dog-swapper to replace the dog in my base image with the dog shown in my reference photos."
