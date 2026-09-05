@@ -4,7 +4,7 @@ description: Replace the dog in an existing wallpaper or image with the same rea
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Dog Swapper
