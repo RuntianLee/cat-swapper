@@ -4,7 +4,7 @@ description: Choose the cat or dog wallpaper replacement workflow when the user 
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Pet Swapper
@@ -24,6 +24,6 @@ Route the request to exactly one species-specific skill in this same conversatio
 
 Resolve these paths relative to this `SKILL.md`, not the working directory. All three skill folders must be installed as siblings for this entry to work. If a selected sibling is missing, report the exact missing path and request installation; do not invent or substitute a prompt.
 
-Follow the selected skill in the current conversation, preserving the user's attachments, image roles, chosen provider, request limits, and existing authorization. Do not ask the user to repeat an already clear choice or authorization. Read its complete `prompt.txt` and pass that text unchanged as directed by the selected skill; do not concatenate both prompts or add this routing text to the image instruction.
+Follow the selected skill in this same local sibling set, preserving the user's attachments, image roles, chosen provider, request limits, and existing authorization. Do not ask the user to repeat an already clear choice or authorization. The specialist must inspect the current base and compose its per-image expression paragraph followed by the complete unchanged `prompt.txt`. Do not reuse another wallpaper's expression paragraph, concatenate cat and dog prompts, or add this routing text to the image instruction. Do not silently use an installed specialist from a different version.
 
 Selecting a workflow does not authorize image generation. If the user requested only inspection or prompt preparation, complete that work without calling an image tool. The selected skill owns the image call and result handling; do not generate a second result from this entry.
