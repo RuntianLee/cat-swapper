@@ -40,15 +40,17 @@ cat-swapper/
 1. 用户明确选择猫/狗 Skill 或目标物种时，优先遵循该选择。
 2. 没有明确选择时，检查基础图和身份参考，猫进入 `cat-swapper`，狗进入 `dog-swapper`。
 3. 手动选择与图片冲突、物种或目标不清楚、参考包含不同宠物时，说明具体问题并询问；不擅自切换。
-4. 选定后完整读取对应 Skill 和提示词，由该 Skill 执行一次工作流；不启动子 Agent、不拼接两份提示词、不重复生成。
+4. 选定后完整读取对应 Skill 和提示词，由该 Skill 执行一次工作流；不启动子智能体、不拼接两份提示词、不重复生成。
 
 ## 输入与执行
 
 图片 1 是唯一基础壁纸，也是最终姿势与表情的来源；图片 2 起是同一只目标猫或目标狗的原始照片。用户明确指定其他图片职责时遵循该指定。身份参考只提供稳定的身份特征，不提供最终构图、姿势与表情；不要使用生成图、合成壁纸或其他宠物的照片作为身份参考。
 
-准备提示词需要能查看基础图和身份参考；实际生成还需要接受全部输入图片的图像生成/编辑工具。本仓库不附带模型、API Key 或付费调用授权。用户要求仅检查或准备提示词时，不调用模型；明确要求生成时，默认一张、零自动重试，不静默切换模型或服务商。
+准备提示词需要能查看基础图和身份参考；实际生成还需要接受全部输入图片的图像生成／编辑工具。本仓库不附带模型、API 密钥或付费调用授权。用户要求仅检查或准备提示词时，不调用模型；明确要求生成时，默认一张、零自动重试，不静默切换模型或服务商。
 
-## 动态表情与身份边界（Cat/Dog v0.4.0，Pet v0.2.0）
+## 动态表情与身份边界（猫／狗 v0.4.1，公共入口 v0.2.1）
+
+本版将 Skill 执行说明统一为中文，保留原有流程、约束和通用提示词；已核对翻译语义与文件完整性，尚未进行中文说明版本的生图回归测试。
 
 猫／狗专用 Skill 使用相同的 6 步流程，身份特征仍按各自物种的提示词处理：
 
@@ -65,20 +67,20 @@ cat-swapper/
 
 ## 安装
 
-可通过 Skills CLI 安装三个同级入口（运行命令前确认信任本仓库）：
+可通过 Skills CLI 命令行工具安装三个同级入口（运行命令前确认信任本仓库）：
 
 ```bash
 npx -y skills add RuntianLee/cat-swapper -g --all
 ```
 
-也可以手动安装。先把源码克隆到普通工作目录，例如在自己的项目目录中执行；**不要把整个仓库克隆到 Agent 的 Skills 目录中**：
+也可以手动安装。先把源码克隆到普通工作目录，例如在自己的项目目录中执行；**不要把整个仓库克隆到智能体的 Skill 安装目录中**：
 
 ```bash
 git clone https://github.com/RuntianLee/cat-swapper.git
 cd cat-swapper
 ```
 
-下面的 macOS/Linux shell 命令均从这个源码仓库根目录运行。将三个子目录直接复制到同一个 Skills 目录，避免依赖嵌套发现或符号链接：
+下面的 macOS／Linux 终端命令均从这个源码仓库根目录运行。将三个子目录直接复制到同一个 Skill 安装目录，避免依赖嵌套发现或符号链接：
 
 ```bash
 (
@@ -101,10 +103,10 @@ cd cat-swapper
 
 | 范围 | 目标目录 |
 | --- | --- |
-| Codex、Gemini CLI、GitHub Copilot CLI 的用户级 Skills | `$HOME/.agents/skills` |
-| Claude Code 用户级 Skills | `$HOME/.claude/skills` |
-| 项目级共享 Skills | 目标项目的绝对路径下 `.agents/skills` |
-| Claude Code 项目级 Skills | 目标项目的绝对路径下 `.claude/skills` |
+| Codex、Gemini CLI、GitHub Copilot CLI 的用户级 Skill 目录 | `$HOME/.agents/skills` |
+| Claude Code 用户级 Skill 目录 | `$HOME/.claude/skills` |
+| 项目级共享 Skill 目录 | 目标项目的绝对路径下 `.agents/skills` |
+| Claude Code 项目级 Skill 目录 | 目标项目的绝对路径下 `.claude/skills` |
 
 其他支持 Agent Skills 的平台（如 Cursor）也可使用这三个独立目录，具体安装位置与调用方式以对应平台文档为准。Windows 可手动复制这三个文件夹，保持它们并列。只需要猫或狗时，可只复制对应目录；使用公共入口时必须安装全部三个目录。
 
@@ -120,9 +122,9 @@ cd cat-swapper
 | `dog-swapper/` | `skills/dog-swapper/` |
 | 无公共入口 | `skills/pet-swapper/` |
 
-旧版直接克隆到 Skills 目录的安装不能只靠 `git pull` 完成迁移。先在 Skills 目录之外取得上述新源码，旧目录尚未迁移前不要覆盖它。后续更新时，在这个独立源码目录运行 `git pull --ff-only`，再执行以下步骤。
+旧版直接克隆到 Skill 安装目录的安装不能只靠 `git pull` 完成迁移。先在 Skill 安装目录之外取得上述新源码，旧目录尚未迁移前不要覆盖它。后续更新时，在这个独立源码目录运行 `git pull --ff-only`，再执行以下步骤。
 
-从新源码根目录运行以下命令，先检查三个源目录，再将旧安装（包括符号链接）移到 Skills 扫描范围之外备份，最后复制新版本。备份保留本地修改，不会被自动删除：
+从新源码根目录运行以下命令，先检查三个源目录，再将旧安装（包括符号链接）移到 Skill 扫描范围之外备份，最后复制新版本。备份保留本地修改，不会被自动删除：
 
 ```bash
 (
@@ -145,7 +147,7 @@ cd cat-swapper
 )
 ```
 
-其他安装范围替换同一个 `swapper_dest`，其最后一级目录应为 `skills`。如需回退，先将新安装移出 Skills 目录，再将备份里的旧目录放回原位置；不要把备份放在 Skills 目录里，以免出现重名入口。复制安装不会自动随源码更新，之后仍需执行上述备份与复制步骤。
+其他安装范围替换同一个 `swapper_dest`，其最后一级目录应为 `skills`。如需回退，先将新安装移出 Skill 安装目录，再将备份里的旧目录放回原位置；不要把备份放在 Skill 安装目录里，以免出现重名入口。复制安装不会自动随源码更新，之后仍需执行上述备份与复制步骤。
 
 ## 调用示例
 
@@ -186,13 +188,13 @@ shasum -a 256 skills/cat-swapper/prompt.txt skills/dog-swapper/prompt.txt
 
 ## 平台格式依据
 
-- [Agent Skills Specification](https://agentskills.io/specification)
-- [OpenAI Codex Skills](https://learn.chatgpt.com/docs/build-skills)
-- [Claude Code Skills](https://code.claude.com/docs/en/slash-commands)
-- [Cursor Agent Skills](https://cursor.com/docs/skills)
-- [Gemini CLI Agent Skills](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/using-agent-skills.md)
-- [GitHub Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
+- [Agent Skills 格式规范](https://agentskills.io/specification)
+- [OpenAI Codex 技能文档](https://learn.chatgpt.com/docs/build-skills)
+- [Claude Code 技能文档](https://code.claude.com/docs/en/slash-commands)
+- [Cursor 技能文档](https://cursor.com/docs/skills)
+- [Gemini CLI 技能文档](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/using-agent-skills.md)
+- [GitHub Copilot 技能文档](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
 
-## License
+## 许可证
 
 [MIT](LICENSE)。每个可安装 Skill 目录也包含相同许可，便于单独分发。

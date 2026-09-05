@@ -1,29 +1,29 @@
 ---
 name: pet-swapper
-description: Choose the cat or dog wallpaper replacement workflow when the user asks to replace a pet in an existing image without selecting a species-specific skill, or explicitly requests Pet Swapper. Respect a direct cat-swapper or dog-swapper selection.
+description: 用户要求替换现有图片中的宠物、但未选择物种专用 Skill，或明确要求使用 Pet Swapper 时，选择猫或狗的壁纸替换流程。尊重用户直接选择 cat-swapper 或 dog-swapper。
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
-# Pet Swapper
+# Pet Swapper：宠物壁纸替换入口
 
-Route the request to exactly one species-specific skill in this same conversation. This entry has no image prompt and does not generate images itself or spawn another agent.
+在当前对话中，将请求交给恰好一个物种专用 Skill。本入口不包含生图提示词，不自行生成图片，也不启动其他智能体。
 
-## Select the workflow
+## 选择工作流程
 
-1. Honor an explicit `cat-swapper` or `dog-swapper` selection. If the user instead states a target species, use that choice. If explicit choices conflict with each other or with the supplied images, explain the conflict and ask which choice or input to correct; do not silently switch.
-2. Otherwise inspect the supplied base image and identity references to identify the species. The first image is the base and later images are identity references unless the user assigns other roles. Route cats to Cat Swapper and dogs to Dog Swapper.
-3. If the species, target subject, or image roles remain ambiguous, or references mix different animals, ask only for the missing decision. Cat-to-dog, dog-to-cat, and other-species replacement are outside these workflows; explain the unsupported case without starting generation.
+1. 尊重用户明确选择的 `cat-swapper` 或 `dog-swapper`；用户只指定目标物种时，遵循该选择。明确选择之间相互冲突，或与输入图片冲突时，说明冲突并询问应修正哪个选择或输入；不得擅自切换。
+2. 没有明确选择时，查看基础图与身份参考，判断物种。除非用户指定其他职责，否则第一张图片作为基础图，后续图片作为身份参考。猫进入猫咪专用 Skill，狗进入狗狗专用 Skill。
+3. 物种、目标主体或图片职责仍不明确，或参考中混有不同动物时，只询问缺失的决定。猫换狗、狗换猫及其他物种替换不在这些流程的适用范围内；说明不支持的情况，不开始生成。
 
-## Continue with the selected skill
+## 继续执行选定的 Skill
 
-- Cat: read [Cat Swapper](../cat-swapper/SKILL.md) completely.
-- Dog: read [Dog Swapper](../dog-swapper/SKILL.md) completely.
+- 猫：完整阅读[猫咪专用 Skill](../cat-swapper/SKILL.md)。
+- 狗：完整阅读[狗狗专用 Skill](../dog-swapper/SKILL.md)。
 
-Resolve these paths relative to this `SKILL.md`, not the working directory. All three skill folders must be installed as siblings for this entry to work. If a selected sibling is missing, report the exact missing path and request installation; do not invent or substitute a prompt.
+以上路径相对于本 `SKILL.md` 解析，不是相对于工作目录。三个 Skill 文件夹必须作为同级目录一起安装，本入口才能工作。选定的同级 Skill 缺失时，报告具体缺失路径并请求安装；不得编造或替换提示词。
 
-Follow the selected skill in this same local sibling set, preserving the user's attachments, image roles, chosen provider, request limits, and existing authorization. Do not ask the user to repeat an already clear choice or authorization. The specialist must inspect the current base and compose its per-image expression paragraph followed by the complete unchanged `prompt.txt`. Do not reuse another wallpaper's expression paragraph, concatenate cat and dog prompts, or add this routing text to the image instruction. Do not silently use an installed specialist from a different version.
+在当前对话中，继续执行同组本地目录里的选定 Skill，保留用户的附件、图片职责、所选服务商、请求上限和已有授权。已经明确的选择或授权，不要求用户重复提供。专用 Skill 必须查看当前基础图，先写出当次表情段，再接上完整且字节不变的 `prompt.txt`。不得复用另一张壁纸的表情段，不得拼接猫狗两份提示词，也不得把本段分流说明加入生图指令。不得擅自使用其他版本的已安装专用 Skill。
 
-Selecting a workflow does not authorize image generation. If the user requested only inspection or prompt preparation, complete that work without calling an image tool. The selected skill owns the image call and result handling; do not generate a second result from this entry.
+选择工作流程不等于获得生图授权。用户只要求检查或准备提示词时，完成这些工作，不调用图片工具。图片调用和结果处理由选定的专用 Skill 负责；本入口不得再生成第二份结果。

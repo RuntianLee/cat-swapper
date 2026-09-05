@@ -1,48 +1,48 @@
 ---
 name: cat-swapper
-description: Replace the cat in an existing wallpaper or image with the same real cat shown in one or more identity reference photos while preserving the base scene, composition, pose, camera, and non-cat content. Use when the user asks to swap or replace a cat in an image or make a wallpaper feature their cat.
+description: 将现有壁纸或图片中的猫替换为一张或多张身份参考照片中的同一只真实猫咪，同时保留基础图的场景、构图、姿势、机位和非猫内容。用户要求换猫、替换图片中的猫，或让壁纸中的猫变成自己的猫时使用。
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
-# Cat Swapper
+# Cat Swapper：猫咪壁纸替换
 
-Use the canonical instructions in `prompt.txt` to replace the cat in a base image with the cat identified by the user's reference photos.
+使用 `prompt.txt` 中的标准指令，将基础图中的猫替换为用户参考照片所指向的那只猫。
 
-## Required inputs
+## 必需输入
 
-- Exactly one base wallpaper or base image containing the source cat to replace.
-- One or more original photos of the same target cat.
-- An explicit request to generate/edit, or a preparation-only request. Only generation requires image-call authorization.
+- 恰好一张基础壁纸或基础图，其中包含待替换的猫。
+- 一张或多张同一只目标猫的原始照片。
+- 用户明确提出生成／编辑要求，或仅准备提示词的要求。只有实际生成需要图片调用授权。
 
-Treat the first image as the base image and every later image as an identity reference unless the user explicitly assigns different roles.
+除非用户明确指定其他职责，否则第一张图片作为基础图，之后的所有图片作为身份参考。
 
-## Workflow
+## 工作流程
 
-1. Resolve attachment roles only when they are ambiguous. If the order is already clear, do not add an unnecessary confirmation step.
-2. Read this directory's complete `prompt.txt` and visually inspect the resolved base image and original identity references. Distinguish the base's temporary expression from the target's stable facial anatomy; do not treat fur volume, perspective or an identity photo's temporary expression as head shape. Do not change the generic prompt file. If a required image cannot be inspected, request the missing image/capability rather than inventing features. Preparation alone does not require an image-generation tool.
-3. 根据输入的壁纸图片中的宠物表情，重新生成本次宠物表情描述。不得沿用其他壁纸的具体描述，也不得只把这句改写指令交给生图模型。 Follow “Per-image expression” below to produce the actual description before the image call.
-4. Compose the image instruction as the resolved per-image expression paragraph, a blank line, then the complete unchanged bytes of `prompt.txt`. Keep observations and the final instruction in the current job directory when local files are available; never overwrite the installed template or an earlier job. Check that the generic suffix is unchanged and the paragraph agrees with the current base. For preparation-only requests, return this instruction and stop without an image call.
-5. Before generation, verify that the chosen tool accepts every input and that the user's current authorization covers the model/provider, request count and any paid cost. Preserve already-clear choices; an exhausted prior authorization cannot be reused. Send the base first, followed by all original identity references in their resolved order. Request one result unless explicitly authorized otherwise; zero automatic retries and no silent tool/provider substitution. If capability or authorization is missing, return the prepared instruction and explain the blocker.
-6. Return or display the saved result and report surfaced model/tool and dimensions. Check expression against the base and prepared paragraph, and facial identity against the original identity references, allowing for the base's viewing angle and expression. Record these as separate checks: a matching expression cannot compensate for a face-shape mismatch, and likeness cannot compensate for an expression mismatch. Keep technical findings separate from owner judgment; do not mark overall success when either check fails or cannot be assessed. Prompt-level “failure” is not an API rejection guarantee; do not conceal an imperfect result, retry or repair it without new authorization.
+1. 仅在附件职责不明确时进行确认。顺序已经清楚时，不增加多余的确认步骤。
+2. 完整阅读本目录的 `prompt.txt`，并查看已确定职责的基础图与原始身份参考。区分基础图中的临时表情与目标宠物稳定的面部结构；不得把毛量、透视或身份照片中的临时表情当成头型。不得修改通用提示词文件。无法查看必需图片时，请求补充缺失的图片或查看能力，不得编造特征。仅准备提示词不需要图像生成工具。
+3. 根据输入的壁纸图片中的宠物表情，重新生成本次宠物表情描述。不得沿用其他壁纸的具体描述，也不得只把这句改写指令交给生图模型。按照下方“当次表情描述”的要求，在调用图片模型前写出实际描述。
+4. 将写好的当次表情段、一个空行和完整且字节不变的 `prompt.txt` 依次组合为生图指令。可以使用本地文件时，将观察记录与最终指令保存在当前作业目录；不得覆盖已安装的模板或之前的作业。检查末尾的通用提示词未被改动，且当次描述符合当前基础图。用户仅要求准备时，返回这份指令后停止，不调用图片模型。
+5. 生成前，确认所选工具能够接收全部输入，并确认用户当前授权覆盖模型／服务商、请求次数及任何付费成本。保留用户已经明确的选择；不得复用已经用完的旧授权。先发送基础图，再按已确定的顺序发送全部原始身份参考。除非另有明确授权，否则只请求一张结果；零自动重试，不擅自替换工具或服务商。缺少所需能力或授权时，返回已准备的指令并说明阻碍。
+6. 返回或展示已保存的结果，并报告可获得的模型／工具名称和图片尺寸。将表情与基础图及已准备的描述对照，将面部身份特征与原始身份参考对照，同时考虑基础图的观察角度和表情。两项分别检查记录：表情匹配不能抵消脸型不匹配，身份相似也不能抵消表情不匹配。技术检查与主人判断分开记录；任一项失败或无法判断时，不得标记为整体成功。提示词中判定“失败”不保证 API 会拒绝该结果；不得隐瞒不理想的结果，也不得在未获得新授权时重试或修复。
 
-## Per-image expression
+## 当次表情描述
 
-- Describe only clearly visible features of the base subject: eyelid position and eye aperture, gaze, mouth/tongue state, and temporary ear posture where distinguishable from ear anatomy. Usually 2–4 salient observations suffice; do not invent features to fill a quota or give unsupported numeric ratios.
-- Write a short, resolved paragraph headed “本次基础图的表情要求”. Use concrete visible structure first; emotional labels are optional interpretations, never substitutes for structure. Open eyes, closed eyes, half-lidded eyes and an open mouth must follow the actual image, not a default cute, calm or impatient expression.
-- For occluded or unclear features, state that they cannot be determined and preserve the occlusion; do not infer them from identity photos or expose them to make checking easier. If no expression features are readable, describe only that limitation, not a guessed mood.
-- The generated paragraph must explicitly state that the base supplies expression state, not facial geometry. Face contour, head width-to-length proportions, cheek/jowl fullness, jaw/chin and muzzle length/width must come from the target's original identity references, together with stable eye shape/color and natural ear anatomy. Describe target-specific facial features only when supported by clear references; if unclear, flag that limit rather than filling it from the base pet or a breed template.
-- 表情迁移只调整当前可见的眼睑开合、视线、嘴巴／舌头状态及可辨认的临时耳位；不得为匹配表情而套用原宠物整张脸的轮廓、拉宽／压扁头脸、扩大腮部或缩短口鼻。把这条边界明确写进当次发送给模型的表情段，而不只留在作业说明中。张嘴等表情造成的自然局部软组织变化与下颌运动可以保留，但不能改变目标宠物稳定的头脸结构；头部方向、透视、主体占位和遮挡仍服从基础图。Do not force one ear type into another. If the expression requires violating target anatomy, flag the conflict before generation rather than sacrificing either constraint.
-- 本段只描述当次可见表情及其与目标宠物身份结构的边界。 Do not import base-pet identity, identity-photo expressions, pet names, scene changes or new style/size instructions. The complete generic scene, pose, anatomy and identity constraints still apply.
+- 只描述基础图主体中清晰可见的特征：眼睑位置、眼裂开合、视线、嘴巴／舌头状态；能与固定耳部结构区分时，才描述临时耳位。通常选取 2–4 个显著观察点即可；不得为凑数量编造特征，也不得给出无依据的数值比例。
+- 以“本次基础图的表情要求”为标题，写出简短、具体的描述段。优先描述可见结构；情绪标签只能作为可选解释，不能替代结构描述。睁眼、闭眼、半眯或张嘴都必须遵循实际图片，不得默认套用可爱、平静或不耐烦的表情。
+- 对被遮挡或看不清的特征，说明无法判断并保留遮挡；不得从身份照片推断，也不得为了方便检查而露出这些部位。如果所有表情特征都无法辨认，只描述这一限制，不猜测情绪。
+- 当次描述必须明确：基础图提供表情状态，不提供脸部几何结构。脸部轮廓、头部宽长比例、脸颊／腮部饱满度、下颌／下巴以及口鼻长度和宽度，连同稳定的眼形、眼色和自然耳部结构，均须来自目标宠物的原始身份参考。只有清晰参考支持时，才描述目标宠物特有的面部特征；不清楚时说明限制，不得从基础图宠物或品种模板补造。
+- 表情迁移只调整当前可见的眼睑开合、视线、嘴巴／舌头状态及可辨认的临时耳位；不得为匹配表情而套用原宠物整张脸的轮廓、拉宽／压扁头脸、扩大腮部或缩短口鼻。把这条边界明确写进当次发送给模型的表情段，而不只留在作业说明中。张嘴等表情造成的自然局部软组织变化与下颌运动可以保留，但不能改变目标宠物稳定的头脸结构；头部方向、透视、主体占位和遮挡仍服从基础图。不得强行把一种耳型改成另一种。若匹配表情会违反目标宠物的结构约束，应在生成前指出冲突，不得牺牲其中任何一项约束。
+- 本段只描述当次可见表情及其与目标宠物身份结构的边界。不得带入基础图宠物的身份特征、身份照片中的表情、宠物名字、场景修改或新的风格／尺寸指令。通用提示词中完整的场景、姿势、身体结构和身份约束仍然适用。
 
-## Boundaries
+## 适用边界
 
-- This skill contains instructions only. It does not supply an image model, API key, paid-call authorization, or provider configuration.
-- Skill activation, attachment inspection, or prompt preparation is not authorization to make a paid model call.
-- Do not use a generated image, wallpaper composite, or an image containing a different cat as an identity reference.
-- This workflow is for cat-to-cat identity replacement. If the base subject or identity references are another species, explain the conflict and ask for clarification; do not silently switch skills or attempt cross-species replacement.
-- If the target subject or input roles are unclear, or references contain different cats, stop and ask for the missing decision. An unreadable expression feature alone is handled by the uncertainty rule above. If generation was not requested, complete preparation only.
-- Preserve privacy and usage rights for every supplied image.
-- The prompt asks for strict preservation, but exact pixel-level preservation of non-cat regions is not guaranteed by generative models.
+- 本 Skill 只包含指令，不提供图片模型、API 密钥、付费调用授权或服务商配置。
+- 启用 Skill、查看附件或准备提示词，都不等于获得付费模型调用授权。
+- 不得使用生成图、合成壁纸或包含另一只猫的图片作为身份参考。
+- 本流程仅用于猫换猫。基础图主体或身份参考属于其他物种时，说明冲突并请求澄清；不得擅自切换 Skill 或尝试跨物种替换。
+- 目标主体或输入职责不清楚，或参考中包含不同的猫时，停止并询问缺失的决定。仅有某项表情特征看不清时，按上方的不确定性规则处理。用户未要求生成时，只完成准备工作。
+- 保护每张输入图片的隐私和使用权。
+- 提示词要求严格保留非猫区域，但生成模型不保证这些区域逐像素不变。
