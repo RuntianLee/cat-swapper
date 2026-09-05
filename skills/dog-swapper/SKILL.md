@@ -4,7 +4,7 @@ description: Replace the dog in an existing wallpaper or image with the same rea
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Dog Swapper
@@ -33,7 +33,7 @@ Treat the first image as the base image and every later image as an identity ref
 - This skill contains instructions only. It does not supply an image model, API key, paid-call authorization, or provider configuration.
 - Skill activation, attachment inspection, or prompt preparation is not authorization to make a paid model call.
 - Do not use a generated image, wallpaper composite, or an image containing a different dog as an identity reference.
-- This workflow is for dog-to-dog identity replacement. If the base subject is another species, stop and explain that strict pose and anatomy preservation need a separate cross-species workflow.
+- This workflow is for dog-to-dog identity replacement. If the base subject or identity references are another species, explain the conflict and ask for clarification; do not silently switch skills or attempt cross-species replacement.
 - If the base image is unclear, the references contain different dogs, or the user has not requested generation, stop and ask for the missing decision.
 - Preserve privacy and usage rights for every supplied image.
 - The prompt asks for strict preservation, but exact pixel-level preservation of non-dog regions is not guaranteed by generative models.

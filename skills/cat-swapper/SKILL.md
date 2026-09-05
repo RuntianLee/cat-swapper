@@ -4,7 +4,7 @@ description: Replace the cat in an existing wallpaper or image with the same rea
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Cat Swapper
@@ -13,7 +13,7 @@ Use the canonical instructions in `prompt.txt` to replace the cat in a base imag
 
 ## Required inputs
 
-- Exactly one base wallpaper or base image.
+- Exactly one base wallpaper or base image containing the source cat to replace.
 - One or more original photos of the same target cat.
 - An explicit request from the user to generate or edit the image.
 
@@ -22,7 +22,7 @@ Treat the first image as the base image and every later image as an identity ref
 ## Workflow
 
 1. Resolve attachment roles only when they are ambiguous. If the order is already clear, do not add an unnecessary confirmation step.
-2. Verify that the current platform exposes an image-generation or image-editing tool that can accept the base image plus all identity references. If it does not, explain the missing capability and point the user to the manual workflow in the repository README.
+2. Verify that the current platform exposes an image-generation or image-editing tool that can accept the base image plus all identity references. If it does not, explain the missing capability; the user can manually provide the images and this directory's complete `prompt.txt` to a suitable image tool.
 3. Read `prompt.txt` completely from this skill directory. Do not shorten, translate, rewrite, summarize, or append cat-specific facts to it.
 4. Give the platform's native image tool the attachments in this order: base image first, then all identity-reference photos. Send the complete, unchanged contents of `prompt.txt` as the image instruction.
 5. Request exactly one result unless the user explicitly requests more. Do not retry automatically and do not switch models, providers, or tools silently.
@@ -33,6 +33,7 @@ Treat the first image as the base image and every later image as an identity ref
 - This skill contains instructions only. It does not supply an image model, API key, paid-call authorization, or provider configuration.
 - Skill activation, attachment inspection, or prompt preparation is not authorization to make a paid model call.
 - Do not use a generated image, wallpaper composite, or an image containing a different cat as an identity reference.
+- This workflow is for cat-to-cat identity replacement. If the base subject or identity references are another species, explain the conflict and ask for clarification; do not silently switch skills or attempt cross-species replacement.
 - If the base image is unclear, the references contain different cats, or the user has not requested generation, stop and ask for the missing decision.
 - Preserve privacy and usage rights for every supplied image.
 - The prompt asks for strict preservation, but exact pixel-level preservation of non-cat regions is not guaranteed by generative models.
