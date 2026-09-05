@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pet Swapper"
+  short_description: "Choose cat or dog wallpaper replacement"
+  default_prompt: "Use $pet-swapper to choose the cat or dog skill for my base wallpaper and pet reference photos."
