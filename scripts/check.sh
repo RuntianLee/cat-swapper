@@ -20,14 +20,22 @@ check_hash() {
     exit 1
   }
   grep -Fq "$expected" README.md
+  grep -Fq "$expected" README.zh-CN.md
 }
+
+test -f README.zh-CN.md
+grep -Fq '[中文](README.zh-CN.md)' README.md
+grep -Fq '[English](README.md)' README.zh-CN.md
 
 test -f skills/cat-swapper/references/single-cat.md
 test -f skills/cat-swapper/references/multi-cat.md
+test -f skills/cat-swapper/references/layered-multi-cat.md
 grep -Fq 'references/single-cat.md' skills/cat-swapper/SKILL.md
 grep -Fq 'references/multi-cat.md' skills/cat-swapper/SKILL.md
+grep -Fq 'references/layered-multi-cat.md' skills/cat-swapper/SKILL.md
 grep -Fq 'prompt.txt' skills/cat-swapper/references/single-cat.md
 grep -Fq 'prompt-multi.txt' skills/cat-swapper/references/multi-cat.md
+grep -Fq 'prompt.txt' skills/cat-swapper/references/layered-multi-cat.md
 
 check_hash skills/cat-swapper/prompt.txt c4a5bc29660791242df2c49fbda6576208baaaea00e94fca12fd4efc008dbe96
 check_hash skills/cat-swapper/prompt-multi.txt 23bb0b2a20d751a8eb83a414247cf2be1b6dc92aa2fc7ef625c902b33751c554
