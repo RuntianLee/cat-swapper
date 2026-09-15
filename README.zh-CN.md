@@ -2,11 +2,11 @@
 
 [English](README.md) | **中文**
 
-**把现有壁纸中的一只或多只宠物替换成原始参考照片里的真实宠物，同时尽可能保持场景、构图、姿势和非宠物内容。**
+**把现有壁纸中的宠物替换成原始照片里的真实宠物，或根据一个人的 MBTI 与个人经历共创折纸猫狗“另一个自己”。**
 
-Cat Swapper 基于开放的 [Agent Skills](https://agentskills.io/specification) 格式，分别提供猫咪、狗狗和公共分流入口。
+Cat Swapper 基于开放的 [Agent Skills](https://agentskills.io/specification) 格式，分别提供猫咪换图、狗狗换图、公共分流和 MBTI 折纸角色共创入口。
 
-> **重要说明：**本仓库只包含工作流和提示词，不提供图片模型、API 密钥或付费调用授权。安装 Skill 不等于授权生成图片。
+> **重要说明：**本仓库只包含工作流、提示词和一张画风参考素材，不提供图片模型、API 密钥或付费调用授权。安装 Skill 不等于授权生成图片。
 
 ## 包含什么
 
@@ -15,6 +15,7 @@ Cat Swapper 基于开放的 [Agent Skills](https://agentskills.io/specification)
 | [`pet-swapper`](skills/pet-swapper/SKILL.md) | 当请求没有明确选择物种时，分流到猫咪或狗狗流程。使用该入口必须同时安装三个 Skill。 |
 | [`cat-swapper`](skills/cat-swapper/SKILL.md) | 替换单猫、一次性生成多猫，或通过本地分层合成制作多猫壁纸。 |
 | [`dog-swapper`](skills/dog-swapper/SKILL.md) | 把基础图中的一只狗替换为一只目标狗。 |
+| [`mbti-origami-pet`](skills/mbti-origami-pet/SKILL.md) | 根据 MBTI 和已授权且可访问的个人历史，共创一个折纸猫或狗“另一个自己”。 |
 
 用户明确选择猫咪或狗狗时优先遵循。混合物种和跨物种替换不在适用范围内。
 
@@ -29,13 +30,13 @@ Cat Swapper 基于开放的 [Agent Skills](https://agentskills.io/specification)
 
 ## 安装
 
-使用 Skills CLI 安装三个入口：
+使用 Skills CLI 安装四个入口：
 
 ```bash
 npx -y skills add RuntianLee/cat-swapper -g --all
 ```
 
-手动安装时，把 `skills/` 下需要的目录并列复制到平台的 Skill 目录。直接使用猫咪或狗狗专用入口时可以只安装对应目录；使用 `pet-swapper` 时必须安装全部三个目录。
+手动安装时，把 `skills/` 下需要的目录并列复制到平台的 Skill 目录。直接换猫或换狗时可只安装对应入口；使用 `pet-swapper` 时安装三个换图 Skill；只做人设共创时可单独安装 `mbti-origami-pet`。
 
 ## 使用
 
@@ -55,6 +56,16 @@ npx -y skills add RuntianLee/cat-swapper -g --all
 使用 $dog-swapper。图1是基础狗壁纸，后续图片是同一只目标狗的原始照片，生成一张结果。
 ```
 
+```text
+使用 $mbti-origami-pet，根据我的 MBTI 和当前对话中可访问的个人历史，共创一个折纸猫或狗“另一个自己”。
+```
+
+## MBTI 折纸角色共创
+
+`mbti-origami-pet` 每次只问一个问题，推荐三个品种，将有出处的个人片段转成两套真正不同的职业场景，并在用户选定方案后只生成一次。名称使用“具体场景＋可见动作＋现实职业”；职业是根据个人特质匹配的理想职业原型，不代表用户真实履历。
+
+内置的[风格参考图](skills/mbti-origami-pet/assets/README.md)只约束大几何折面、独立纸偶构件、哑光纸纤维和纸艺微缩布景；其中的文字、版式、配色、配饰和具体构图都不是模板。
+
 ## 输入与执行边界
 
 - 图 1 是唯一基础图，提供场景、构图、姿势、表情、机位和空间关系。
@@ -62,6 +73,7 @@ npx -y skills add RuntianLee/cat-swapper -g --all
 - 多猫参考必须分成互不重叠的身份组，并与基础猫位建立一对一映射。
 - 每次外部模型调用都需要当前授权。默认只生成一张、零自动重试；不得静默增加请求、切换模型或提高成本。
 - 技术 QC、主人身份判断和整体审美接受必须分开记录。
+- MBTI 共创只使用已授权且可访问的历史与记忆，不声称覆盖完整账号，并将技术 QC、喜欢程度和“像自己”分开记录。
 - 文本提示词不能保证非宠物区域逐像素不变；有硬性要求时使用分层流程，并验证全部 alpha 并集之外的像素。
 
 ## 验证
@@ -83,8 +95,9 @@ npx -y skills add RuntianLee/cat-swapper -g --all
 - 一个猫位可分离的七猫分层案例获得主人整体接受并通过合成完整性检查，但严格姿势／表情 QC 没有整体通过；这不能证明跨壁纸稳定或无损毛发抠像。
 - 该案例中的一次性多猫提示词没有形成获接受的终态。
 - 狗狗流程尚未完成真实模型和主人身份判断验证。
+- MBTI 折纸流程已有多轮单用户交互证据，尚未完成跨用户或跨模型验证。
 - 私人照片、运行账本、授权记录、mask 和生成结果不进入本公开仓库。
 
 ## 许可证
 
-MIT，见 [LICENSE](LICENSE)。
+代码和文本采用 MIT 许可证，见 [LICENSE](LICENSE)。折纸[画风参考图](skills/mbti-origami-pet/assets/README.md)的著作权仍归原权利人，不随 MIT 许可证重新授权。

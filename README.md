@@ -2,11 +2,11 @@
 
 **English** | [中文](README.zh-CN.md)
 
-**Replace one or more pets in an existing wallpaper with the pets from their original reference photos, while keeping the scene, composition, pose, and non-pet content as stable as the workflow allows.**
+**Replace pets in existing wallpapers, or co-create an origami cat or dog alter ego from a person's MBTI and personal history.**
 
-Cat Swapper is an open [Agent Skills](https://agentskills.io/specification) package with separate cat, dog, and routing entries.
+Cat Swapper is an open [Agent Skills](https://agentskills.io/specification) package with separate cat replacement, dog replacement, routing, and MBTI origami co-creation entries.
 
-> **Important:** this repository contains workflows and prompts, not an image model, API key, or paid-call authorization. Installing a Skill never authorizes image generation.
+> **Important:** this repository contains workflows, prompts, and one style-reference asset, not an image model, API key, or paid-call authorization. Installing a Skill never authorizes image generation.
 
 ## What it includes
 
@@ -15,6 +15,7 @@ Cat Swapper is an open [Agent Skills](https://agentskills.io/specification) pack
 | [`pet-swapper`](skills/pet-swapper/SKILL.md) | Route an unclear request to the cat or dog workflow. Install all three Skills when using this entry. |
 | [`cat-swapper`](skills/cat-swapper/SKILL.md) | Replace one cat, generate multiple cats at once, or build a multi-cat wallpaper with local layers. |
 | [`dog-swapper`](skills/dog-swapper/SKILL.md) | Replace one dog with one target dog. |
+| [`mbti-origami-pet`](skills/mbti-origami-pet/SKILL.md) | Co-create an origami cat or dog alter ego from MBTI and authorized, accessible personal history. |
 
 Explicit cat or dog selection takes priority. Mixed-species and cross-species replacement are out of scope.
 
@@ -29,13 +30,13 @@ The layered workflow is preferred when its geometry fits. The one-shot prompt re
 
 ## Install
 
-Install all three entries with the Skills CLI:
+Install all four entries with the Skills CLI:
 
 ```bash
 npx -y skills add RuntianLee/cat-swapper -g --all
 ```
 
-For a manual installation, copy the required folders from `skills/` into your platform's Skill directory as peer folders. Install only `cat-swapper` or `dog-swapper` for direct specialist use; install all three when using `pet-swapper`.
+For a manual installation, copy the required folders from `skills/` into your platform's Skill directory as peer folders. Install only `cat-swapper` or `dog-swapper` for direct replacement, all three replacement Skills when using `pet-swapper`, or only `mbti-origami-pet` for personality co-creation.
 
 ## Usage
 
@@ -55,6 +56,16 @@ Use $cat-swapper's layered multi-cat workflow. First prepare a zero-call preflig
 Use $dog-swapper. Image 1 is the base dog wallpaper; the remaining images are original photos of the target dog. Generate one result.
 ```
 
+```text
+Use $mbti-origami-pet to co-create an origami cat or dog alter ego from my MBTI and the personal history available in this conversation.
+```
+
+## MBTI origami co-creation
+
+`mbti-origami-pet` asks one question at a time, recommends three breeds, connects traceable personal moments to two distinct role scenes, and generates once after the user chooses a proposal. Role titles follow “specific setting + visible action + real-world occupation”; the occupation is an aspirational archetype matched to the person's traits, not a claim about their work history.
+
+The included [style reference](skills/mbti-origami-pet/assets/README.md) defines the large folded planes, separate paper components, matte fibers, and miniature paper set. Its text, layout, colors, accessories, and exact composition are not templates.
+
 ## Inputs and guardrails
 
 - Image 1 is the only base image and supplies the scene, composition, pose, expression, camera, and spatial relationships.
@@ -62,6 +73,7 @@ Use $dog-swapper. Image 1 is the base dog wallpaper; the remaining images are or
 - Multi-cat references must be split into non-overlapping groups with a one-to-one position mapping.
 - Each external model call needs current authorization. The default is one output and zero automatic retries; do not silently add calls, change models, or raise cost.
 - Technical QC, owner identity judgment, and overall visual acceptance are recorded separately.
+- MBTI co-creation uses only authorized, accessible history and memory, never claims complete account coverage, and keeps technical QC, preference, and self-recognition separate.
 - Text prompts cannot guarantee pixel-identical non-pet regions. Use the layered workflow and verify pixels outside the combined alpha when that requirement is strict.
 
 ## Verify
@@ -83,8 +95,9 @@ The check validates required files, mode references, bilingual README links, and
 - One separable seven-cat layered case received overall owner acceptance and passed composition-integrity checks, but strict pose/expression QC did not fully pass. It does not prove cross-wallpaper reliability or lossless fur matting.
 - The one-shot multi-cat prompt has not produced an accepted final result in that case.
 - The dog workflow has not completed a real-model, owner-identity validation.
+- The MBTI origami workflow has repeated single-user interaction evidence, but no cross-user or cross-model validation.
 - Private photos, run ledgers, authorization records, masks, and generated results are not included in this public repository.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Code and text are MIT licensed — see [LICENSE](LICENSE). The origami [style-reference image](skills/mbti-origami-pet/assets/README.md) remains the property of its original rights holder and is not relicensed under MIT.
