@@ -2,22 +2,85 @@
 
 **English** | [中文](README.zh-CN.md)
 
-**Replace pets in existing wallpapers, or co-create an origami cat or dog alter ego from a person's MBTI and personal history.**
+![Two origami paper characters introduce MBTI personality co-creation](skills/mbti-origami-pet/assets/origami-cat-dog-style-reference.png)
 
-Cat Swapper is an open [Agent Skills](https://agentskills.io/specification) package with separate cat replacement, dog replacement, routing, and MBTI origami co-creation entries.
+**Co-create an origami cat or dog alter ego from your MBTI and personal history, or replace pets in an existing wallpaper with real pets from original photos.**
+
+Cat Swapper is an open [Agent Skills](https://agentskills.io/specification) package. Its featured experience is personality-led origami character co-creation; three sibling Skills cover real-pet image replacement.
 
 > **Important:** this repository contains workflows, prompts, and one style-reference asset, not an image model, API key, or paid-call authorization. Installing a Skill never authorizes image generation.
 
-## What it includes
+## Featured Skill: `mbti-origami-pet`
 
-| Skill | Use it for |
-| --- | --- |
-| [`pet-swapper`](skills/pet-swapper/SKILL.md) | Route an unclear request to the cat or dog workflow. Install all three Skills when using this entry. |
-| [`cat-swapper`](skills/cat-swapper/SKILL.md) | Replace one cat, generate multiple cats at once, or build a multi-cat wallpaper with local layers. |
-| [`dog-swapper`](skills/dog-swapper/SKILL.md) | Replace one dog with one target dog. |
-| [`mbti-origami-pet`](skills/mbti-origami-pet/SKILL.md) | Co-create an origami cat or dog alter ego from MBTI and authorized, accessible personal history. |
+[`mbti-origami-pet`](skills/mbti-origami-pet/SKILL.md) turns a person's MBTI and authorized, accessible personal history into an origami cat or dog that feels like another version of them.
+
+It asks one question at a time, recalls two or three traceable moments in a warm “memory time machine” voice, recommends three visually distinct breeds, and presents two role scenes whose headings reveal the whole idea at a glance. Scene names use a concrete setting, visible action, and real-world aspirational occupation; they never claim that occupation is part of the user's actual work history.
+
+After the user chooses a proposal, the Skill generates one image with zero automatic retries. Technical quality, visual preference, and “does this feel like me?” remain separate judgments.
+
+Install only the featured Skill:
+
+```bash
+npx -y skills add RuntianLee/cat-swapper -g --skill mbti-origami-pet -y
+```
+
+Use it:
+
+```text
+Use $mbti-origami-pet to co-create an origami cat or dog alter ego from my MBTI and the personal history available in this conversation.
+```
+
+The included [style reference](skills/mbti-origami-pet/assets/README.md) defines the large folded planes, separate paper components, matte fibers, and miniature paper set. Its text, layout, colors, accessories, poses, and exact composition are not templates.
+
+## Real-pet replacement Skills
+
+### `cat-swapper`
+
+[`cat-swapper`](skills/cat-swapper/SKILL.md) replaces one cat, generates several mapped cats in one request, or builds a multi-cat wallpaper with a cat-free base and local layers. It uses original photos as identity evidence and keeps technical QC, owner identity judgment, and overall visual acceptance separate.
+
+```bash
+npx -y skills add RuntianLee/cat-swapper -g --skill cat-swapper -y
+```
+
+```text
+Use $cat-swapper. Image 1 is the base cat wallpaper; the remaining images are original photos of the target cat. Generate one result.
+```
+
+### `dog-swapper`
+
+[`dog-swapper`](skills/dog-swapper/SKILL.md) replaces one dog in an existing image with the same target dog from one or more original reference photos while preserving the base scene, composition, pose, camera, and non-dog content as far as the workflow allows.
+
+```bash
+npx -y skills add RuntianLee/cat-swapper -g --skill dog-swapper -y
+```
+
+```text
+Use $dog-swapper. Image 1 is the base dog wallpaper; the remaining images are original photos of the target dog. Generate one result.
+```
+
+### `pet-swapper`
+
+[`pet-swapper`](skills/pet-swapper/SKILL.md) is the routing entry for a pet-replacement request that has not selected cats or dogs. It delegates to `cat-swapper` or `dog-swapper`, so install all three replacement Skills together:
+
+```bash
+npx -y skills add RuntianLee/cat-swapper -g --skill pet-swapper cat-swapper dog-swapper -y
+```
+
+```text
+Use $pet-swapper to choose the correct cat or dog workflow for my base image and original pet photos.
+```
 
 Explicit cat or dog selection takes priority. Mixed-species and cross-species replacement are out of scope.
+
+## Install everything
+
+Install all four Skills:
+
+```bash
+npx -y skills add RuntianLee/cat-swapper -g --all
+```
+
+For a manual installation, copy the required folders from `skills/` into your platform's Skill directory as peer folders.
 
 ## Multi-cat workflows
 
@@ -28,47 +91,13 @@ Explicit cat or dog selection takes priority. Mixed-species and cross-species re
 
 The layered workflow is preferred when its geometry fits. The one-shot prompt remains necessary for interactions that cannot be separated into independent alpha layers.
 
-## Install
-
-Install all four entries with the Skills CLI:
-
-```bash
-npx -y skills add RuntianLee/cat-swapper -g --all
-```
-
-For a manual installation, copy the required folders from `skills/` into your platform's Skill directory as peer folders. Install only `cat-swapper` or `dog-swapper` for direct replacement, all three replacement Skills when using `pet-swapper`, or only `mbti-origami-pet` for personality co-creation.
-
-## Usage
-
-```text
-Use $pet-swapper to choose the correct cat or dog workflow for my base image and original pet photos.
-```
-
-```text
-Use $cat-swapper. Image 1 is the base cat wallpaper; the remaining images are original photos of the target cat. Generate one result.
-```
-
 ```text
 Use $cat-swapper's layered multi-cat workflow. First prepare a zero-call preflight and freeze the canvas, cat positions, reference groups, request cap, and cost cap. Do not call an image API without my confirmation.
 ```
 
-```text
-Use $dog-swapper. Image 1 is the base dog wallpaper; the remaining images are original photos of the target dog. Generate one result.
-```
-
-```text
-Use $mbti-origami-pet to co-create an origami cat or dog alter ego from my MBTI and the personal history available in this conversation.
-```
-
-## MBTI origami co-creation
-
-`mbti-origami-pet` asks one question at a time, recommends three breeds, connects traceable personal moments to two distinct role scenes, and generates once after the user chooses a proposal. Role titles follow “specific setting + visible action + real-world occupation”; the occupation is an aspirational archetype matched to the person's traits, not a claim about their work history.
-
-The included [style reference](skills/mbti-origami-pet/assets/README.md) defines the large folded planes, separate paper components, matte fibers, and miniature paper set. Its text, layout, colors, accessories, and exact composition are not templates.
-
 ## Inputs and guardrails
 
-- Image 1 is the only base image and supplies the scene, composition, pose, expression, camera, and spatial relationships.
+- Image 1 is the only base image for replacement workflows and supplies the scene, composition, pose, expression, camera, and spatial relationships.
 - Identity references must be original photos of one clearly assigned target pet. Generated images and composites are not identity references.
 - Multi-cat references must be split into non-overlapping groups with a one-to-one position mapping.
 - Each external model call needs current authorization. The default is one output and zero automatic retries; do not silently add calls, change models, or raise cost.
@@ -82,7 +111,7 @@ The included [style reference](skills/mbti-origami-pet/assets/README.md) defines
 ./scripts/check.sh
 ```
 
-The check validates required files, mode references, bilingual README links, and prompt hashes.
+The check validates required files, mode references, bilingual README links, prompt hashes, and the style-reference hash.
 
 | Prompt | SHA-256 |
 | --- | --- |
