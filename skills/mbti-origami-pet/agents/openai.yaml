@@ -1,0 +1,4 @@
+interface:
+  display_name: "mbti-origami-pet"
+  short_description: "Turn MBTI and personal history into an origami pet"
+  default_prompt: "Use $mbti-origami-pet to co-create an origami cat or dog character from my MBTI and available personal history."
