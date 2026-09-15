@@ -4,7 +4,7 @@ description: 根据用户的 MBTI 和已授权且可访问的对话历史，先�
 license: MIT
 metadata:
   author: RuntianLee
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # MBTI Origami Pet：折纸猫狗人格共创
